@@ -1,1 +1,5 @@
-include $(call all-makefiles-under, $(LOCAL_PATH))
+# device.mk
+PRODUCT_PACKAGES += \
+    recovery
+
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
