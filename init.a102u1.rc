@@ -1,0 +1,24 @@
+# init.a102u1.rc
+on init
+    export PATH /sbin:/system/sbin:/system/bin:/system/xbin
+    export LD_LIBRARY_PATH /vendor/lib:/system/lib
+    export ANDROID_ROOT /system
+    export ANDROID_DATA /data
+    export EXTERNAL_STORAGE /sdcard
+    export ASEC_MOUNTPOINT /mnt/asec
+    export LOOP_MOUNTPOINT /mnt/obb
+
+on early-init
+    setenforce 0
+
+service adbd /sbin/adbd
+    seclabel u:r:adbd:s0
+    disabled
+    oneshot
+
+on property:sys.usb.config=adb
+    start adbd
+
+# Add other services and configurations here
+on boot
+    insmod /vendor/lib/modules/touchscreen.ko
