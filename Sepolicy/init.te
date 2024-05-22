@@ -1,1 +1,31 @@
+# init.te
+type init, domain;
+type init_exec, exec_type, file_type;
+
+allow init self:process *;
+allow init *:file *;
+allow init *:dir *;
+allow init *:lnk_file *;
+allow init *:chr_file *;
+allow init *:blk_file *;
+allow init *:sock_file *;
+allow init *:fifo_file *;
+allow init *:process *;
+allow init *:capability *;
+allow init *:capability2 *;
+allow init *:filesystem *;
+allow init *:system *;
+allow init *:service_manager *;
+allow init *:properties *;
+allow init *:ipc *;
+allow init *:binder *;
+allow init *:netif *;
+allow init *:netlink_socket *;
+allow init *:net_raw_socket *;
+allow init *:net_packet_socket *;
+allow init *:fd *;
+allow init *:tcp_socket *;
+allow init *:udp_socket *;
+allow init *:rawip_socket *;
+allow init self:capability2 { mac_override };
 allow init self:capability { sys_admin };
