@@ -1,0 +1,50 @@
+# init.rc
+# Initializations
+on init
+    export PATH /sbin:/system/sbin:/system/bin:/system/xbin
+    export LD_LIBRARY_PATH /vendor/lib:/system/lib
+    export ANDROID_ROOT /system
+    export ANDROID_DATA /data
+    export EXTERNAL_STORAGE /sdcard
+    export ASEC_MOUNTPOINT /mnt/asec
+    export LOOP_MOUNTPOINT /mnt/obb
+    export BOOTCLASSPATH /system/framework/core-oj.jar:/system/framework/core-libart.jar:/system/framework/conscrypt.jar:/system/framework/okhttp.jar:/system/framework/core-junit.jar:/system/framework/bouncycastle.jar:/system/framework/ext.jar:/system/framework/framework.jar:/system/framework/telephony-common.jar:/system/framework/voip-common.jar:/system/framework/ims-common.jar:/system/framework/android.test.runner.jar:/system/framework/apache-xml.jar:/system/framework/org.apache.http.legacy.boot.jar
+
+    start logd
+    start servicemanager
+    start healthd
+
+    setenforce 0
+
+on early-init
+    setenforce 0
+
+on boot
+    mount rootfs rootfs / rw remount
+    mkdir /mnt 0775 root system
+    mkdir /mnt/shell 0775 root shell
+    mkdir /mnt/secure 0700 root root
+    mkdir /mnt/secure/asec 0700 root root
+    mount tmpfs tmpfs /mnt/secure 0700 root root
+    mkdir /mnt/secure/staging 0700 root root
+    mkdir /mnt/secure/asec 0700 root root
+    mount tmpfs tmpfs /mnt/secure/asec 0700 root root
+
+    chmod 0700 /data/misc
+    chmod 0750 /data/misc/adb
+    chown system.system /data/misc/adb
+    mkdir /data/local/tmp 0771 shell shell
+    mkdir /data/local/tmp/adb 0771 shell shell
+    chmod 0771 /data/local/tmp
+    chmod 0771 /data/local/tmp/adb
+    chmod 0775 /mnt/secure/asec
+
+    start adbd
+
+service adbd /sbin/adbd
+    seclabel u:r:adbd:s0
+    disabled
+    oneshot
+
+on property:sys.usb.config=adb
+    start adbd
