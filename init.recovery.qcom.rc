@@ -1,0 +1,13 @@
+on init
+    export ANDROID_ROOT /system
+    export ANDROID_DATA /data
+    export EXTERNAL_STORAGE /sdcard
+    mkdir /dev/block 0775 root system
+
+on fs
+    mount_all /fstab.qcom
+    setprop ro.crypto.state unencrypted
+
+on post-fs
+    # Load drivers
+    insmod /vendor/lib/modules/<touchscreen_driver>.ko
